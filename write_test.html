@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postoffice - Write Test</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; background: #f4f4f9; color: #333; }
+        .container { max-width: 600px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        textarea { width: 100%; height: 120px; padding: 10px; border-radius: 4px; border: 1px solid #ccc; font-family: monospace; box-sizing: border-box; }
+        button { background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background: #218838; }
+        pre { background: #222; color: #fff; padding: 15px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>✍️ Write File Test</h2>
+    <p>Modify the data below and send it to completely update <strong>test.json</strong>.</p>
+    
+    <textarea id="fileContent">{
+    "serverStatus": "Online",
+    "lastUpdatedBy": "Web Interface",
+    "message": "Hello from the development PC!"
+}</textarea>
+
+    <button onclick="writeFile()">Submit Update</button>
+
+    <h3>Server Response:</h3>
+    <pre id="output">Awaiting submission...</pre>
+</div>
+
+<script>
+async function writeFile() {
+    const url = 'https://api.plasmastarstudios.com/api/write?fileName=test.json';
+    const content = document.getElementById('fileContent').value;
+    const outputElement = document.getElementById('output');
+    outputElement.textContent = "Sending package...";
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-Post-Token': 'SuperSecretPostOfficeKey123!',
+                'Content-Type': 'application/json'
+            },
+            body: content // The raw text to write into the file
+        });
+
+        const text = await response.text();
+        outputElement.textContent = `Status ${response.status}: ${text}`;
+        
+    } catch (error) {
+        outputElement.textContent = `Connection Failed: ${error.message}`;
+    }
+}
+</script>
+
+</body>
+</html>
