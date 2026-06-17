@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postoffice - Read Test</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; background: #f4f4f9; color: #333; }
+        .container { max-width: 600px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        button { background: #007acc; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #005999; }
+        pre { background: #222; color: #fff; padding: 15px; border-radius: 4px; overflow-x: auto; min-height: 50px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📬 Read File Test</h2>
+    <p>Press the button to request <strong>test.json</strong> through your secure pipeline.</p>
+    
+    <button onclick="readFile()">Read test.json</button>
+
+    <h3>Server Response:</h3>
+    <pre id="output">Click the button to send request...</pre>
+</div>
+
+<script>
+async function readFile() {
+    const url = 'https://api.plasmastarstudios.com//api/read?fileName=test.json';
+    const outputElement = document.getElementById('output');
+    outputElement.textContent = "Fetching...";
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                // This is your vital security check header
+                'X-Post-Token': 'SuperSecretPostOfficeKey123!',
+                
+                // 🚀 THE MAGIC LINE: Bypasses the ngrok warning screen completely!
+                'ngrok-skip-browser-warning': 'true'
+            }
+        });
+
+        const text = await response.text();
+        
+        if (response.ok) {
+            // If it's valid JSON, pretty-print it
+            try {
+                outputElement.textContent = JSON.stringify(JSON.parse(text), null, 4);
+            } catch {
+                outputElement.textContent = text; // Fallback if it's plain text
+            }
+        } else {
+            outputElement.textContent = `Error ${response.status}: ${text}`;
+        }
+    } catch (error) {
+        outputElement.textContent = `Connection Failed: ${error.message}\n(Make sure the app is running on the Mini PC and your Tunnel is online!)`;
+    }
+}
+</script>
+
+</body>
+</html>
