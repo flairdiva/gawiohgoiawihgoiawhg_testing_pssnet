@@ -32,7 +32,8 @@
 
 <script>
 async function writeFile() {
-    const url = 'https://api.plasmastarstudios.com/api/write?fileName=test.json';
+    // 🚀 UPDATED: Pointing to your working ngrok tunnel URL
+    const url = 'https://unusual-faucet-calamari.ngrok-free.dev/api/write?fileName=test.json';
     const content = document.getElementById('fileContent').value;
     const outputElement = document.getElementById('output');
     outputElement.textContent = "Sending package...";
@@ -42,7 +43,9 @@ async function writeFile() {
             method: 'POST',
             headers: {
                 'X-Post-Token': 'SuperSecretPostOfficeKey123!',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                // 🚀 THE MAGIC LINE: Bypasses the ngrok warning screen for POST requests too!
+                'ngrok-skip-browser-warning': 'true'
             },
             body: content // The raw text to write into the file
         });
